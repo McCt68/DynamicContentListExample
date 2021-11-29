@@ -1,6 +1,7 @@
 package eu.example.dynamiccontentlistexample
 
 // Video 38
+// Now 42 tested Git branch
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
