@@ -1,6 +1,6 @@
 package eu.example.dynamiccontentlistexample
 
-// Now 42 tested Git branch
+// 43 State Hoisting
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -30,26 +30,38 @@ class MainActivity : ComponentActivity() {
 // calls @GreetingList
 @Composable
 fun MainScreen(){
+    // Remember state when recomposition happens
+    val greetingListState = remember {
+        mutableStateListOf<String>("knud", "Bettine")
+    }
+
+    // Layout
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        GreetingList() // call @GreetingList
+        // call @GreetingList with parameters
+        // 1 parameter greetingListState
+        // 2 parameter a buttonClick  / lambda function
+        // the lambda function code executes when the button is clicked
+        GreetingList(greetingListState, { greetingListState.add("New name") })
     }
 }
 
+// higher order function
+// first parameter a namesList of String
+// second parameter a function that don't return anything ( Unit ) - The buttonClick is called
 @Composable
-fun GreetingList() {
-    // Remember state when recomposition happens
-    val greetingListState = remember {mutableStateListOf<String>("knud", "Bettine")}
-    for (name in greetingListState){
+fun GreetingList(namesList: List<String>, buttonClick: () -> Unit) {
+
+    for (name in namesList){
         Greeting(name = name)
     }
 
+    // Trigger recomposition when we press the button
     // state is changed when we press button, and recomposition will happen
-    //
-    Button(onClick = { greetingListState.add("New name") }) {
+    Button(onClick = buttonClick) {
         Text(text = "Add new name")
     }
 }
